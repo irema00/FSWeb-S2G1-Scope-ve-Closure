@@ -125,10 +125,10 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
 
 function periyotSkoru(takimSkoru) {
   let evSahibiSkoru = takimSkoru();
-  let konukTakim = takimSkoru();
+  let konukTakimSkoru = takimSkoru();
   return {
     EvSahibi: evSahibiSkoru,
-    KonukTakim: konukTakim,
+    KonukTakim: konukTakimSkoru,
   };
 }
 
@@ -165,7 +165,43 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi() {}
+function skorTabelasi(periyotSkoru, takimSkoru, ceyrekSayisi) {
+  const skorlar = [];
+  let evSahibiToplamSkor = 0;
+  let konukTakimToplamSkor = 0;
+
+  for (let i = 0; i < ceyrekSayisi; i++) {
+    const periyotSkor = periyotSkoru(takimSkoru);
+    const periyotSonucu = `${i + 1}. Periyot: Ev Sahibi ${
+      periyotSkor.EvSahibi
+    } - Konuk Takım ${periyotSkor.KonukTakim}`;
+    skorlar.push(periyotSonucu);
+
+    evSahibiToplamSkor += periyotSkor.EvSahibi;
+    konukTakimToplamSkor += periyotSkor.KonukTakim;
+  }
+
+  if (evSahibiToplamSkor === konukTakimToplamSkor) {
+    let uzatmaSkorlar = [];
+    while (evSahibiToplamSkor === konukTakimToplamSkor) {
+      const uzatmaSkor = periyotSkoru(takimSkoru);
+      uzatmaSkorlar.push(
+        `Uzatma ${uzatmaSkorlar.length + 1}: Ev Sahibi ${
+          uzatmaSkor.EvSahibi
+        } - Konuk Takım ${uzatmaSkor.KonukTakim}`
+      );
+      evSahibiToplamSkor += uzatmaSkor.EvSahibi;
+      konukTakimToplamSkor += uzatmaSkor.KonukTakim;
+    }
+    skorlar.push(...uzatmaSkorlar);
+  }
+
+  const macSonucu = `Maç Sonucu: Ev Sahibi ${evSahibiToplamSkor} - Konuk Takım ${konukTakimToplamSkor}`;
+  skorlar.push(macSonucu);
+
+  return skorlar;
+}
+console.log("Görev 5 ", skorTabelasi(periyotSkoru, takimSkoru, 4));
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
 function sa() {
